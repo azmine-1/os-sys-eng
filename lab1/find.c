@@ -63,12 +63,14 @@ ls(char *path, char* search)
         printf("ls: cannot stat %s\n", buf);
         continue;
       }
-      if(st.type == T_DIR && *p != '.' ){
-        ls(p, search);
-      } else if (strcmp(p, search) == 0){
-        printf("./%s\n", buf);
+      
+      if(st.type == T_DIR && strcmp(p,".") != 0 && strcmp(p, "..") != 0){
+        ls(buf, search);
+      }else if(strcmp(p,search) == 0){
+        printf("%s\n",buf);
       }
     }
+
     break;
   }
   close(fd);
@@ -77,9 +79,9 @@ ls(char *path, char* search)
 int
 main(int argc, char *argv[])
 {
-
   if(argc != 3){
     fprintf(2, "Usage: find <directory> <filename>\n");
+    exit(1);
   }
   ls(argv[1],argv[2]);
   exit(0);
